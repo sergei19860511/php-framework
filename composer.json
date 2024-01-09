@@ -3,7 +3,7 @@
     "autoload": {
         "psr-4": {
             "Sergei\\PhpFramework\\": "src",
-            "APP\\": "app"
+            "App\\": "app"
         }
     },
     "authors": [
