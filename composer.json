@@ -12,6 +12,9 @@
             "email": "s.kupriyanov@nextcontact.ru"
         }
     ],
+    "require": {
+        "php": "^8.2"
+    },
     "require-dev": {
         "laravel/pint": "^1.13",
         "symfony/var-dumper": "^7.0"
