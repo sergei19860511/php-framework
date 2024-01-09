@@ -1,0 +1,19 @@
+{
+    "name": "sergei/php-framework",
+    "autoload": {
+        "psr-4": {
+            "Sergei\\PhpFramework\\": "src",
+            "APP\\": "app"
+        }
+    },
+    "authors": [
+        {
+            "name": "sergei",
+            "email": "s.kupriyanov@nextcontact.ru"
+        }
+    ],
+    "require-dev": {
+        "laravel/pint": "^1.13",
+        "symfony/var-dumper": "^7.0"
+    }
+}
