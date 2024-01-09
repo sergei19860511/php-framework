@@ -18,4 +18,9 @@ readonly class Request
     {
         return new static($_GET, $_POST, $_COOKIE, $_FILES, $_SERVER);
     }
+
+    public function getParams(): array
+    {
+        return $this->get;
+    }
 }
