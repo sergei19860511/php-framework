@@ -23,4 +23,14 @@ readonly class Request
     {
         return $this->get;
     }
+
+    public function getUri(): string
+    {
+        return strtok($this->server['REQUEST_URI'], '?');
+    }
+
+    public function getMethod(): string
+    {
+        return $this->server['REQUEST_METHOD'];
+    }
 }
