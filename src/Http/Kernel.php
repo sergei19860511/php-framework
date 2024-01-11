@@ -28,8 +28,8 @@ class Kernel
         });
 
         $routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getUri());
-        [$status, $handler, $vars] = $routeInfo;
+        [$status, [$controller, $method], $vars] = $routeInfo;
 
-        return $handler($vars);
+        return (new $controller())->$method($vars);
     }
 }
