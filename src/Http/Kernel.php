@@ -2,6 +2,7 @@
 
 namespace Sergei\PhpFramework\Http;
 
+use Sergei\PhpFramework\Http\Exceptions\HttpException;
 use Sergei\PhpFramework\Routing\RouterInterface;
 
 class Kernel
@@ -16,8 +17,10 @@ class Kernel
             [$routeHandler, $vars] = $this->router->dispatch($request);
 
             $response = call_user_func_array($routeHandler, $vars);
+        } catch (HttpException $exception) {
+            $response = new Response($exception->getMessage(), $exception->getStatusCode());
         } catch (\Throwable $exception) {
-            $response = new Response($exception->getMessage());
+            $response = new Response($exception->getMessage(), 500);
         }
 
         return $response;
