@@ -2,34 +2,25 @@
 
 namespace Sergei\PhpFramework\Http;
 
-use FastRoute\RouteCollector;
-use function FastRoute\simpleDispatcher;
+use Sergei\PhpFramework\Routing\RouterInterface;
 
 class Kernel
 {
+    public function __construct(private RouterInterface $router)
+    {
+    }
+
     public function handle(Request $request): Response
     {
-        $dispatcher = simpleDispatcher(function (RouteCollector $collector) {
-            $routes = include BASE_PATH.'/routes/web.php';
+        try {
+            [$routeHandler, $vars] =  $this->router->dispatch($request);
 
-            foreach ($routes as $route) {
-                $collector->addRoute(...$route);
-            }
-            /*$collector->get('/', function () {
-                $content = "<h1>HELLO !!!</h1>";
+            $response = call_user_func_array($routeHandler, $vars);
+        }
+        catch (\Throwable $exception) {
+            $response = new Response($exception->getMessage());
+        }
 
-                return new Response($content, 200, []);
-            });
-            $collector->get('/user/{id:\d+}', function (array $vars) {
-                $content = "<h1>HELLO User: {$vars['id']}</h1>";
-
-                return new Response($content, 200, []);
-            });*/
-        });
-
-        $routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getUri());
-        [$status, [$controller, $method], $vars] = $routeInfo;
-
-        return call_user_func_array([new $controller, $method], $vars);
+        return $response;
     }
 }
