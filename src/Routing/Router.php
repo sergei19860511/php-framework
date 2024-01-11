@@ -9,7 +9,6 @@ use function FastRoute\simpleDispatcher;
 
 class Router implements RouterInterface
 {
-
     public function dispatch(Request $request): array
     {
         $dispatcher = simpleDispatcher(function (RouteCollector $collector) {
@@ -23,6 +22,6 @@ class Router implements RouterInterface
         $routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getUri());
         [$status, [$controller, $method], $vars] = $routeInfo;
 
-         return [[new $controller, $method], $vars];
+        return [[new $controller, $method], $vars];
     }
 }
