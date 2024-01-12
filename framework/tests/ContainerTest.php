@@ -35,4 +35,19 @@ class ContainerTest extends TestCase
 
         $container->add('no-class');
     }
+
+    /**
+     * @throws ContainerException
+     */
+    public function test_method_has()
+    {
+        $container = new Container();
+
+        $container->add('somecode-class', SomecodeClass::class);
+
+        $this->assertTrue($container->has('somecode-class'));
+
+        $this->assertFalse($container->has('no-class'));
+    }
+
 }
