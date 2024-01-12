@@ -2,8 +2,8 @@
 
 namespace Sergei\PhpFramework\Http;
 
-use Sergei\PhpFramework\Routing\RouterInterface;
 use Sergei\PhpFramework\Http\Exceptions\HttpException;
+use Sergei\PhpFramework\Routing\RouterInterface;
 
 class Kernel
 {

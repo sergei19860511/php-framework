@@ -3,19 +3,30 @@
 namespace Sergei\PhpFramework\Container;
 
 use Psr\Container\ContainerInterface;
+use Sergei\PhpFramework\Container\Exceptions\ContainerException;
 
 class Container implements ContainerInterface
 {
-
     private array $service = [];
 
-    public function add(string $id, string|object $concrete = null): void
+    /**
+     * @throws ContainerException
+     */
+    public function add(string $id, string|object|null $concrete = null): void
     {
+        if (is_null($concrete)) {
+            $concrete = $id;
+
+            if (! class_exists($id)) {
+                throw new ContainerException("Service $id not found");
+            }
+        }
+
         $this->service[$id] = $concrete;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function get(string $id)
     {
@@ -23,7 +34,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function has(string $id): bool
     {
