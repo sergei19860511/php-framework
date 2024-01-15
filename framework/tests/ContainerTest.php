@@ -50,4 +50,22 @@ class ContainerTest extends TestCase
         $this->assertFalse($container->has('no-class'));
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerException
+     */
+    public function test_dependencys()
+    {
+        $container = new Container();
+
+        $container->add('somecode-class', SomecodeClass::class);
+
+        /** @var  $somecode SomecodeClass */
+        $somecode = $container->get('somecode-class');
+
+        $this->assertInstanceOf(TestDependecys::class, $somecode->getDepen());
+
+    }
+
 }

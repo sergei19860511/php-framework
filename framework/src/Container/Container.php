@@ -30,7 +30,17 @@ class Container implements ContainerInterface
      */
     public function get(string $id)
     {
-        return new $this->service[$id];
+        if (! $this->has($id)) {
+            if (! class_exists($id)) {
+                throw new ContainerException("Service $id not found");
+            }
+
+            $this->add($id);
+        }
+
+        $instance = $this->resolve($this->service[$id]);
+
+        return $instance;
     }
 
     /**
