@@ -44,6 +44,33 @@ class Container implements ContainerInterface
     }
 
     /**
+     * @throws \ReflectionException
+     */
+    private function resolve($class)
+    {
+        //1 Создать объект Reflection
+        $reflection = new \ReflectionClass($class);
+
+        //2 Использовать Reflection для попытки получить конструктор класса
+        $construct = $reflection->getConstructor();
+
+        //3 Если нет конструктора просто создать экземпляр
+        if (is_null($construct)) {
+            return $reflection->newInstance();
+        }
+
+        //4 Получить параметры конструктора
+        $constructParams = $construct->getParameters();
+
+        //5 Получить зависимости
+        $classDependecys = $this->resolveClassDependencys($constructParams);
+
+        //6 Создать объект с зависимостями
+
+        //7 Вернуть объект
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function has(string $id): bool
