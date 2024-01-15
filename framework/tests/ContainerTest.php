@@ -54,6 +54,7 @@ class ContainerTest extends TestCase
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      * @throws ContainerException
+     * @throws \ReflectionException
      */
     public function test_dependencys()
     {
@@ -64,7 +65,7 @@ class ContainerTest extends TestCase
         /** @var  $somecode SomecodeClass */
         $somecode = $container->get('somecode-class');
 
-        $this->assertInstanceOf(TestDependecys::class, $somecode->getDepen());
+        $this->assertInstanceOf(TestDependencies::class, $somecode->getDepen());
 
     }
 

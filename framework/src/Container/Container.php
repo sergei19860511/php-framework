@@ -2,7 +2,9 @@
 
 namespace Sergei\PhpFramework\Container;
 
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Sergei\PhpFramework\Container\Exceptions\ContainerException;
 
 class Container implements ContainerInterface
@@ -27,6 +29,7 @@ class Container implements ContainerInterface
 
     /**
      * {@inheritDoc}
+     * @throws \ReflectionException
      */
     public function get(string $id)
     {
@@ -38,9 +41,7 @@ class Container implements ContainerInterface
             $this->add($id);
         }
 
-        $instance = $this->resolve($this->service[$id]);
-
-        return $instance;
+        return $this->resolve($this->service[$id]);
     }
 
     /**
@@ -63,11 +64,11 @@ class Container implements ContainerInterface
         $constructParams = $construct->getParameters();
 
         //5 Получить зависимости
-        $classDependecys = $this->resolveClassDependencys($constructParams);
+        $classDependencies = $this->resolveClassDependencies($constructParams);
 
         //6 Создать объект с зависимостями
-
         //7 Вернуть объект
+        return $reflection->newInstanceArgs($classDependencies);
     }
 
     /**
@@ -76,5 +77,32 @@ class Container implements ContainerInterface
     public function has(string $id): bool
     {
         return array_key_exists($id, $this->service);
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws \ReflectionException
+     */
+    private function resolveClassDependencies(array $constructParams): array
+    {
+        //1 Инициализировать пустой список зависимостей
+        $classDependencies = [];
+
+        //2 Найти и cоздать экземпляр
+        /** @var  $constructParam \ReflectionParameter */
+        foreach ($constructParams as $constructParam) {
+            // Получить тип параметра
+            $serviceType = $constructParam->getType();
+
+            // Создать экземпляр используя $serviceType
+            $service = $this->get($serviceType->getName());
+
+            // Добавить сервис в class $classDependencies
+            $classDependencies[] = $service;
+        }
+
+        //3 Вернуть массив $classDependencies
+        return $classDependencies;
     }
 }

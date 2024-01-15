@@ -4,12 +4,12 @@ namespace Sergei\PhpFramework\Tests;
 
 class SomecodeClass
 {
-    public function __construct(private readonly TestDependecys $dependecys)
+    public function __construct(private readonly TestDependencies $dependencies)
     {
     }
 
-    public function getDepen(): TestDependecys
+    public function getDepen(): TestDependencies
     {
-        return $this->dependecys;
+        return $this->dependencies;
     }
 }
