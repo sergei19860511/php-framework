@@ -4,6 +4,7 @@ namespace Sergei\PhpFramework\Routing;
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
+use League\Container\Container;
 use Sergei\PhpFramework\Http\Exceptions\RouteNotAllowedException;
 use Sergei\PhpFramework\Http\Exceptions\RouteNotFoundException;
 use Sergei\PhpFramework\Http\Request;
@@ -18,13 +19,14 @@ class Router implements RouterInterface
      * @throws RouteNotFoundException
      * @throws RouteNotAllowedException
      */
-    public function dispatch(Request $request): array
+    public function dispatch(Request $request, Container $container): array
     {
         [$handlerRoute, $vars] = $this->extractRouteInfo($request);
 
         if (is_array($handlerRoute)) {
-            [$controller, $method] = $handlerRoute;
-            $handlerRoute = [new $controller, $method];
+            [$controllerId, $method] = $handlerRoute;
+            $controller = $container->get($controllerId);
+            $handlerRoute = [$controller, $method];
         }
 
         return [$handlerRoute, $vars];

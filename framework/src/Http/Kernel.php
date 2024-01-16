@@ -2,19 +2,20 @@
 
 namespace Sergei\PhpFramework\Http;
 
+use League\Container\Container;
 use Sergei\PhpFramework\Http\Exceptions\HttpException;
 use Sergei\PhpFramework\Routing\RouterInterface;
 
 class Kernel
 {
-    public function __construct(private RouterInterface $router)
+    public function __construct(private RouterInterface $router, private readonly Container $container)
     {
     }
 
     public function handle(Request $request): Response
     {
         try {
-            [$routeHandler, $vars] = $this->router->dispatch($request);
+            [$routeHandler, $vars] = $this->router->dispatch($request, $this->container);
 
             $response = call_user_func_array($routeHandler, $vars);
         } catch (HttpException $exception) {
