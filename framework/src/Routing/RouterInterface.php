@@ -7,4 +7,6 @@ use Sergei\PhpFramework\Http\Request;
 interface RouterInterface
 {
     public function dispatch(Request $request);
+
+    public function registerRoute(array $routes);
 }
