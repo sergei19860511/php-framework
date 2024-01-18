@@ -4,10 +4,11 @@ namespace App\Controllers;
 
 use App\Services\TestServices;
 use Sergei\PhpFramework\Http\Response;
+use Twig\Environment;
 
 class HomeController
 {
-    public function __construct(private readonly TestServices $services)
+    public function __construct(private readonly TestServices $services, private readonly Environment $twig)
     {
     }
 

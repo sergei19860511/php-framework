@@ -8,6 +8,8 @@ use Sergei\PhpFramework\Helpers\Helpers;
 use Sergei\PhpFramework\Http\Kernel;
 use Sergei\PhpFramework\Routing\Router;
 use Sergei\PhpFramework\Routing\RouterInterface;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 $appEnv = Helpers::get_env('APP_ENV');
 
@@ -25,5 +27,9 @@ $container->add(RouterInterface::class, Router::class);
 $container->extend(RouterInterface::class)->addMethodCall('registerRoute', [new ArrayArgument($routes)]);
 
 $container->add(Kernel::class)->addArgument(RouterInterface::class)->addArgument($container);
+
+$container->addShared('twig-loader', FilesystemLoader::class)->addArgument(BASE_PATH.'/views');
+
+$container->addShared(Environment::class)->addArgument('twig-loader');
 
 return $container;
