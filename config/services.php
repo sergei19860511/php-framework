@@ -14,7 +14,6 @@ use Twig\Loader\FilesystemLoader;
 
 $appEnv = Helpers::get_env('APP_ENV');
 
-
 $routes = include BASE_PATH.'/routes/web.php';
 
 $container = new Container();
@@ -31,7 +30,7 @@ $container->add(Kernel::class)->addArgument(RouterInterface::class)->addArgument
 
 $container->addShared('twig-loader', FilesystemLoader::class)->addArgument(new StringArgument(BASE_PATH.'/views'));
 
-$container->addShared( 'twig',Environment::class)->addArgument('twig-loader');
+$container->addShared('twig', Environment::class)->addArgument('twig-loader');
 
 $container->inflector(AbstractController::class)->invokeMethod('setContainer', [$container]);
 

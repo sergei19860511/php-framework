@@ -3,9 +3,13 @@
 namespace App\Controllers;
 
 use App\Services\TestServices;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Sergei\PhpFramework\Controller\AbstractController;
 use Sergei\PhpFramework\Http\Response;
-use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class HomeController extends AbstractController
 {
@@ -13,12 +17,17 @@ class HomeController extends AbstractController
     {
     }
 
+    /**
+     * @throws NotFoundExceptionInterface
+     * @throws SyntaxError
+     * @throws ContainerExceptionInterface
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     public function index(): Response
     {
-        dd($this->container->get('twig'));
-        $content = '<h1>HELLO!!!</h1>';
-        $content .= $this->services->getString();
-
-        return new Response($content);
+        return $this->render('home.html.twig', [
+            'test' => $this->services->getString(),
+        ]);
     }
 }

@@ -10,7 +10,7 @@ final class Helpers
     {
         $dotenv = new Dotenv();
         $dotenv->load(BASE_PATH.'/.env');
-        if (!in_array($id, $_ENV)) {
+        if (! in_array($id, $_ENV)) {
             return false;
         }
 
