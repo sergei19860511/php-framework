@@ -27,7 +27,7 @@ abstract class AbstractController
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public function render(string $view, array $params, ?Response $response = null): Response
+    public function render(string $view, array $params = [], ?Response $response = null): Response
     {
         /** @var $twig Environment */
         $twig = $this->container->get('twig');
