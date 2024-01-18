@@ -4,14 +4,13 @@ use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
+use Sergei\PhpFramework\Helpers\Helpers;
 use Sergei\PhpFramework\Http\Kernel;
 use Sergei\PhpFramework\Routing\Router;
 use Sergei\PhpFramework\Routing\RouterInterface;
-use Symfony\Component\Dotenv\Dotenv;
 
-$dotenv = new Dotenv();
-$dotenv->load(BASE_PATH.'/.env');
-$appEnv = $_ENV['APP_ENV'];
+$appEnv = Helpers::get_env('APP_ENV');
+
 
 $routes = include BASE_PATH.'/routes/web.php';
 
