@@ -4,6 +4,7 @@ use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
+use Sergei\PhpFramework\Controller\AbstractController;
 use Sergei\PhpFramework\Helpers\Helpers;
 use Sergei\PhpFramework\Http\Kernel;
 use Sergei\PhpFramework\Routing\Router;
@@ -28,8 +29,10 @@ $container->extend(RouterInterface::class)->addMethodCall('registerRoute', [new 
 
 $container->add(Kernel::class)->addArgument(RouterInterface::class)->addArgument($container);
 
-$container->addShared('twig-loader', FilesystemLoader::class)->addArgument(BASE_PATH.'/views');
+$container->addShared('twig-loader', FilesystemLoader::class)->addArgument(new StringArgument(BASE_PATH.'/views'));
 
-$container->addShared(Environment::class)->addArgument('twig-loader');
+$container->addShared( 'twig',Environment::class)->addArgument('twig-loader');
+
+$container->inflector(AbstractController::class)->invokeMethod('setContainer', [$container]);
 
 return $container;
