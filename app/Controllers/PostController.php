@@ -2,14 +2,32 @@
 
 namespace App\Controllers;
 
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Sergei\PhpFramework\Controller\AbstractController;
 use Sergei\PhpFramework\Http\Response;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
-class PostController
+class PostController extends AbstractController
 {
+    /**
+     * @throws SyntaxError
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     public function index(int $id): Response
     {
-        $content = "<h1>The Post: $id</h1>";
+        return $this->render('post.html.twig',[
+           'post' => $id
+        ]);
+    }
 
-        return new Response($content);
+    public function create(): Response
+    {
+        return $this->render('create.html.twig');
     }
 }
