@@ -5,6 +5,7 @@ use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
+use Sergei\PhpFramework\Console\Application;
 use Sergei\PhpFramework\Console\Kernel as ConsoleKernel;
 use Sergei\PhpFramework\Controller\AbstractController;
 use Sergei\PhpFramework\Dbal\ConnectionFactory;
@@ -46,6 +47,6 @@ $container->addShared(Connection::class, function () use ($container): Connectio
     return $container->get(ConnectionFactory::class)->create();
 });
 
-$container->add(ConsoleKernel::class)->addArgument($container);
+$container->add(ConsoleKernel::class)->addArgument($container)->addArgument(Application::class);
 
 return $container;

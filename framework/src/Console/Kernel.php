@@ -8,15 +8,22 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class Kernel
 {
-    public function __construct(private ContainerInterface $container)
+    public function __construct(private ContainerInterface $container, private Application $app)
     {
     }
 
+    /**
+     * @throws \ReflectionException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function handle(): int
     {
         $this->registerCommands();
 
-        return 0;
+        $status = $this->app->run();
+
+        return $status;
     }
 
     /**
@@ -44,6 +51,5 @@ class Kernel
             }
 
         }
-        dd($this->container);
     }
 }
