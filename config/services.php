@@ -5,6 +5,7 @@ use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
+use Sergei\PhpFramework\Console\Kernel as ConsoleKernel;
 use Sergei\PhpFramework\Controller\AbstractController;
 use Sergei\PhpFramework\Dbal\ConnectionFactory;
 use Sergei\PhpFramework\Helpers\Helpers;
@@ -22,6 +23,8 @@ $routes = include BASE_PATH.'/routes/web.php';
 $container = new Container();
 
 $container->delegate(new ReflectionContainer(true));
+
+$container->add('command-namespace', new StringArgument('Sergei\\PhpFramework\\Console\\Commands\\'));
 
 $container->add('APP_ENV', new StringArgument($appEnv));
 
@@ -42,5 +45,7 @@ $container->add(ConnectionFactory::class)->addArgument(new StringArgument($dataB
 $container->addShared(Connection::class, function () use ($container): Connection {
     return $container->get(ConnectionFactory::class)->create();
 });
+
+$container->add(ConsoleKernel::class)->addArgument($container);
 
 return $container;
