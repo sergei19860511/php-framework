@@ -14,8 +14,8 @@ use Sergei\PhpFramework\Routing\RouterInterface;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
-$appEnv = Helpers::get_env('APP_ENV');
-$dataBase = Helpers::get_env('DATA_BASE');
+$appEnv = Helpers::loadEnv('APP_ENV');
+$dataBase = Helpers::loadEnv('DATA_BASE');
 
 
 $routes = include BASE_PATH.'/routes/web.php';

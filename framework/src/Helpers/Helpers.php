@@ -6,7 +6,7 @@ use Symfony\Component\Dotenv\Dotenv;
 
 final class Helpers
 {
-    public static function get_env(string $vars): string|bool|null
+    public static function loadEnv(string $vars): string|bool|null
     {
         $dotenv = new Dotenv();
         $dotenv->load(BASE_PATH.'/.env');
