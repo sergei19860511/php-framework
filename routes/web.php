@@ -2,7 +2,6 @@
 
 use App\Controllers\HomeController;
 use App\Controllers\PostController;
-use Sergei\PhpFramework\Http\Response;
 use Sergei\PhpFramework\Routing\Route;
 
 return [

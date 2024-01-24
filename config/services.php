@@ -17,7 +17,6 @@ use Twig\Loader\FilesystemLoader;
 $appEnv = Helpers::loadEnv('APP_ENV');
 $dataBase = Helpers::loadEnv('DATA_BASE');
 
-
 $routes = include BASE_PATH.'/routes/web.php';
 
 $container = new Container();
