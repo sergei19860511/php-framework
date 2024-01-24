@@ -1,10 +1,12 @@
 <?php
 
+use Doctrine\DBAL\Connection;
 use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
 use Sergei\PhpFramework\Controller\AbstractController;
+use Sergei\PhpFramework\Dbal\ConnectionFactory;
 use Sergei\PhpFramework\Helpers\Helpers;
 use Sergei\PhpFramework\Http\Kernel;
 use Sergei\PhpFramework\Routing\Router;
@@ -13,6 +15,8 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
 $appEnv = Helpers::get_env('APP_ENV');
+$dataBase = Helpers::get_env('DATA_BASE');
+
 
 $routes = include BASE_PATH.'/routes/web.php';
 
@@ -33,5 +37,11 @@ $container->addShared('twig-loader', FilesystemLoader::class)->addArgument(new S
 $container->addShared('twig', Environment::class)->addArgument('twig-loader');
 
 $container->inflector(AbstractController::class)->invokeMethod('setContainer', [$container]);
+
+$container->add(ConnectionFactory::class)->addArgument(new StringArgument($dataBase));
+
+$container->addShared(Connection::class, function () use ($container): Connection {
+    return $container->get(ConnectionFactory::class)->create();
+});
 
 return $container;
