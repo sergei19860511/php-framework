@@ -10,6 +10,8 @@ class MigrateCommand implements CommandInterface
 
     public function execute(array $params = []): int
     {
+        echo "HELLO {$params['name']}";
+
         return 0;
     }
 }
