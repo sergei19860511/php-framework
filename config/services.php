@@ -48,7 +48,9 @@ $container->addShared(Connection::class, function () use ($container): Connectio
     return $container->get(ConnectionFactory::class)->create();
 });
 
-$container->add('console:migrate', MigrateCommand::class)->addArgument(Connection::class);
+$container->add('console:migrate', MigrateCommand::class)
+    ->addArgument(Connection::class)
+    ->addArgument(new StringArgument(BASE_PATH.'/database/migrations'));
 
 $container->add(Application::class)->addArgument($container);
 

@@ -10,7 +10,7 @@ use Sergei\PhpFramework\Console\CommandInterface;
 class MigrateCommand implements CommandInterface
 {
     private const MIGRATION_TABLE_NAME = 'migrations';
-    public function __construct(private Connection $connection)
+    public function __construct(private Connection $connection, private string $migratePath)
     {
     }
 
@@ -22,7 +22,9 @@ class MigrateCommand implements CommandInterface
             $this->addTableMigrations();
             $this->connection->beginTransaction();
             $appliedMigrations = $this->getAppliedMigrations();
-            dd($appliedMigrations);
+            $migrationFiles = $this->getMigrationsFiles();
+            $migrateToApply = array_values(array_diff($migrationFiles, $appliedMigrations));
+
             $this->connection->commit();
         }catch (\Throwable $e) {
             $this->connection->rollBack();
@@ -60,5 +62,15 @@ class MigrateCommand implements CommandInterface
             ->from(self::MIGRATION_TABLE_NAME)
             ->executeQuery()
             ->fetchFirstColumn();
+    }
+
+    private function getMigrationsFiles(): array
+    {
+        $migrationsFiles = scandir($this->migratePath);
+        $filtered = array_filter($migrationsFiles, function ($fileName) {
+           return ! in_array($fileName, ['.', '..']);
+        });
+
+        return array_values($filtered);
     }
 }
