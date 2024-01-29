@@ -21,8 +21,8 @@ class PostController extends AbstractController
      */
     public function index(int $id): Response
     {
-        return $this->render('post.html.twig',[
-           'post' => $id
+        return $this->render('post.html.twig', [
+            'post' => $id,
         ]);
     }
 
