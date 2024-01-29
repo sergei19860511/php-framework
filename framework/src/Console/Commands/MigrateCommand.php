@@ -25,6 +25,13 @@ class MigrateCommand implements CommandInterface
             $migrationFiles = $this->getMigrationsFiles();
             $migrateToApply = array_values(array_diff($migrationFiles, $appliedMigrations));
 
+            $schema = new Schema();
+            foreach ($migrateToApply as $migrate) {
+                $migrationInstance = require $this->migratePath."/$migrate";
+                $migrationInstance->up($schema);
+            }
+
+
             $this->connection->commit();
         }catch (\Throwable $e) {
             $this->connection->rollBack();

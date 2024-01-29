@@ -1,10 +1,23 @@
 <?php
 
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Types;
+
 return new class
 {
-    public function up(): void
+    public function up(Schema $schema): void
     {
-        echo 'hello up migrate';
+        $table = $schema->createTable('posts');
+        $table->addColumn('id', Types::INTEGER, [
+            'autoincrement' => true,
+            'unsigned' => true
+        ]);
+        $table->addColumn('title', Types::STRING);
+        $table->addColumn('text', Types::TEXT);
+        $table->addColumn('created_at', Types::DATETIME_IMMUTABLE, [
+            'default' => 'CURRENT_TIMESTAMP'
+        ]);
+        $table->setPrimaryKey(['id']);
     }
 
     public function down(): void
