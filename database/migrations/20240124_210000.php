@@ -20,8 +20,8 @@ return new class
         $table->setPrimaryKey(['id']);
     }
 
-    public function down(): void
+    public function down(Schema $schema): void
     {
-        echo 'hello down migrate';
+        //
     }
 };

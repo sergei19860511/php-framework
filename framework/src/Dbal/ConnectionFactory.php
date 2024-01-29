@@ -17,8 +17,12 @@ class ConnectionFactory
      */
     public function create(): Connection
     {
-        return DriverManager::getConnection([
+        $connect = DriverManager::getConnection([
             'url' => $this->dbUrl,
         ]);
+
+        $connect->setAutoCommit(false);
+
+        return $connect;
     }
 }
