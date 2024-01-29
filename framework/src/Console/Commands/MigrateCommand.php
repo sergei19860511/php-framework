@@ -21,6 +21,8 @@ class MigrateCommand implements CommandInterface
         try {
             $this->addTableMigrations();
             $this->connection->beginTransaction();
+            $appliedMigrations = $this->getAppliedMigrations();
+            dd($appliedMigrations);
             $this->connection->commit();
         }catch (\Throwable $e) {
             $this->connection->rollBack();
@@ -49,5 +51,14 @@ class MigrateCommand implements CommandInterface
             $sql = $schema->toSql($this->connection->getDatabasePlatform());
             $this->connection->executeQuery($sql[0]);
         }
+    }
+
+    private function getAppliedMigrations(): array
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        return $queryBuilder->select('migrate')
+            ->from(self::MIGRATION_TABLE_NAME)
+            ->executeQuery()
+            ->fetchFirstColumn();
     }
 }
