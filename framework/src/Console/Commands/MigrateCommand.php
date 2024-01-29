@@ -29,6 +29,7 @@ class MigrateCommand implements CommandInterface
             foreach ($migrateToApply as $migrate) {
                 $migrationInstance = require $this->migratePath."/$migrate";
                 $migrationInstance->up($schema);
+                $this->addMigrateToTableMigrations($migrate);
             }
 
 
@@ -79,5 +80,14 @@ class MigrateCommand implements CommandInterface
         });
 
         return array_values($filtered);
+    }
+
+    private function addMigrateToTableMigrations(string $nameMigrate): void
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder->insert(self::MIGRATION_TABLE_NAME)
+            ->values(['migrate' => ':migrate'])
+            ->setParameter('migrate', $nameMigrate)
+            ->executeQuery();
     }
 }
