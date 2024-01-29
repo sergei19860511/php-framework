@@ -18,7 +18,14 @@ class MigrateCommand implements CommandInterface
 
     public function execute(array $params = []): int
     {
-        $this->addTableMigrations();
+        try {
+            $this->addTableMigrations();
+            $this->connection->beginTransaction();
+            $this->connection->commit();
+        }catch (\Throwable $e) {
+            $this->connection->rollBack();
+            throw $e;
+        }
 
         return 0;
     }
