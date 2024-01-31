@@ -5,6 +5,7 @@ namespace App\Controllers;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Sergei\PhpFramework\Controller\AbstractController;
+use Sergei\PhpFramework\Http\Request;
 use Sergei\PhpFramework\Http\Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -29,5 +30,10 @@ class PostController extends AbstractController
     public function create(): Response
     {
         return $this->render('create.html.twig');
+    }
+
+    public function store()
+    {
+        dd(123);
     }
 }

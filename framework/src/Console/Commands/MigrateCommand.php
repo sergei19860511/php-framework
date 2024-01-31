@@ -3,7 +3,9 @@
 namespace Sergei\PhpFramework\Console\Commands;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\SchemaException;
 use Doctrine\DBAL\Types\Types;
 use Sergei\PhpFramework\Console\CommandInterface;
 
@@ -46,6 +48,10 @@ class MigrateCommand implements CommandInterface
         return 0;
     }
 
+    /**
+     * @throws SchemaException
+     * @throws Exception
+     */
     private function addTableMigrations(): void
     {
         $schemaManager = $this->connection->createSchemaManager();
