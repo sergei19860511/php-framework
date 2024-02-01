@@ -34,6 +34,6 @@ class PostController extends AbstractController
 
     public function store()
     {
-        dd(123);
+        dd($this->request->getPost());
     }
 }

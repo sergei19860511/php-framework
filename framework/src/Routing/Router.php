@@ -5,6 +5,7 @@ namespace Sergei\PhpFramework\Routing;
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 use League\Container\Container;
+use Sergei\PhpFramework\Controller\AbstractController;
 use Sergei\PhpFramework\Http\Exceptions\RouteNotAllowedException;
 use Sergei\PhpFramework\Http\Exceptions\RouteNotFoundException;
 use Sergei\PhpFramework\Http\Request;
@@ -26,6 +27,10 @@ class Router implements RouterInterface
         if (is_array($handlerRoute)) {
             [$controllerId, $method] = $handlerRoute;
             $controller = $container->get($controllerId);
+
+            if (is_subclass_of($controller, AbstractController::class)) {
+                $controller->setRequest($request);
+            }
             $handlerRoute = [$controller, $method];
         }
 

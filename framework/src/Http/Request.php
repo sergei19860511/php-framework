@@ -32,4 +32,9 @@ readonly class Request
     {
         return $this->server['REQUEST_METHOD'];
     }
+
+    public function getPost(): array
+    {
+        return $this->post;
+    }
 }
