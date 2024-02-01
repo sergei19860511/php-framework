@@ -27,8 +27,10 @@ class PostController extends AbstractController
      */
     public function index(int $id): Response
     {
+        $post = $this->service->find($id);
+
         return $this->render('post.html.twig', [
-            'post' => $id,
+            'post' => $post,
         ]);
     }
 
@@ -46,7 +48,7 @@ class PostController extends AbstractController
 
     public function store()
     {
-        $post = Post::create($this->request->getPost()['title'], $this->request->getPost()['body']);
+        $post = (new \App\Entities\Post)->create($this->request->getPost()['title'], $this->request->getPost()['body']);
         $post = $this->service->save($post);
         dd($post);
     }

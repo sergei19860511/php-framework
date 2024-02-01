@@ -3,18 +3,21 @@
 namespace App\Services;
 
 use App\Entities\EntitiesInterface;
+use App\Entities\Post;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 class DbService
 {
+    private QueryBuilder $query;
     public function __construct(private Connection $connection)
     {
+        $this->query = $this->connection->createQueryBuilder();
     }
 
     public function save(EntitiesInterface $entities): EntitiesInterface
     {
-        $queryBuilder = $this->connection->createQueryBuilder();
-        $queryBuilder->insert('posts')
+        $this->query->insert('posts')
             ->values([
                 'title' => ':title',
                 'text' => ':text',
@@ -29,5 +32,25 @@ class DbService
         $entities->setId($postId);
 
         return $entities;
+    }
+
+    public function find(int $id): ?EntitiesInterface
+    {
+        $result = $this->query->select('*')
+            ->from('posts')
+            ->where('id = :id')
+            ->setParameter('id', $id)
+            ->executeQuery()
+            ->fetchAssociative();
+
+        if (! $result) {
+            return null;
+        }
+        return Post::create(
+            title: $result['title'],
+            text: $result['text'],
+            id: $result['id'],
+            created_at: new \DateTimeImmutable($result['created_at'])
+        );
     }
 }

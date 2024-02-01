@@ -1,5 +1,6 @@
 {% extends 'layouts/main.html.twig' %}
 
 {% block main %}
-    <h1>The Post: {{ post }}</h1>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.text }}</p>
 {% endblock %}
