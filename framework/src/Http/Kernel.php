@@ -31,7 +31,7 @@ class Kernel
     private function createExceptionResponse(\Exception $e): Response
     {
         if (in_array($this->appEnv, ['local', 'dev'])) {
-            throw new $e;
+            throw $e;
         }
 
         if ($e instanceof HttpException) {

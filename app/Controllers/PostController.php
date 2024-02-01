@@ -7,6 +7,7 @@ use App\Services\DbService;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Sergei\PhpFramework\Controller\AbstractController;
+use Sergei\PhpFramework\Http\Exceptions\NotFoundException;
 use Sergei\PhpFramework\Http\Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -24,10 +25,11 @@ class PostController extends AbstractController
      * @throws ContainerExceptionInterface
      * @throws RuntimeError
      * @throws LoaderError
+     * @throws NotFoundException
      */
     public function index(int $id): Response
     {
-        $post = $this->service->find($id);
+        $post = $this->service->findOrFail($id);
 
         return $this->render('post.html.twig', [
             'post' => $post,

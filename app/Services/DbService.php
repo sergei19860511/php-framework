@@ -6,6 +6,8 @@ use App\Entities\EntitiesInterface;
 use App\Entities\Post;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Sergei\PhpFramework\Http\Exceptions\HttpException;
+use Sergei\PhpFramework\Http\Exceptions\NotFoundException;
 
 class DbService
 {
@@ -52,5 +54,16 @@ class DbService
             id: $result['id'],
             created_at: new \DateTimeImmutable($result['created_at'])
         );
+    }
+
+    public function findOrFail(int $id): EntitiesInterface
+    {
+        $post = $this->find($id);
+
+        if (is_null($post)) {
+            throw new NotFoundException("Post - $id not found");
+        }
+
+        return $post;
     }
 }
