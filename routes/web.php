@@ -8,5 +8,6 @@ return [
     Route::get('/', [HomeController::class, 'index']),
     Route::get('/posts/{id:\d+}', [PostController::class, 'index']),
     Route::get('/post/create', [PostController::class, 'create']),
+    Route::post('/posts', [PostController::class, 'store']),
 
 ];

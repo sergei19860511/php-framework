@@ -6,6 +6,7 @@ use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
 use Sergei\PhpFramework\Console\Application;
+use Sergei\PhpFramework\Console\Commands\MigrateCommand;
 use Sergei\PhpFramework\Console\Kernel as ConsoleKernel;
 use Sergei\PhpFramework\Controller\AbstractController;
 use Sergei\PhpFramework\Dbal\ConnectionFactory;
@@ -46,6 +47,10 @@ $container->add(ConnectionFactory::class)->addArgument(new StringArgument($dataB
 $container->addShared(Connection::class, function () use ($container): Connection {
     return $container->get(ConnectionFactory::class)->create();
 });
+
+$container->add('console:migrate', MigrateCommand::class)
+    ->addArgument(Connection::class)
+    ->addArgument(new StringArgument(BASE_PATH.'/database/migrations'));
 
 $container->add(Application::class)->addArgument($container);
 
