@@ -12,6 +12,7 @@ use Sergei\PhpFramework\Console\CommandInterface;
 class MigrateCommand implements CommandInterface
 {
     private const MIGRATION_TABLE_NAME = 'migrations';
+
     public function __construct(private Connection $connection, private string $migratePath)
     {
     }
@@ -40,7 +41,7 @@ class MigrateCommand implements CommandInterface
             }
 
             $this->connection->commit();
-        }catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             $this->connection->rollBack();
             throw $e;
         }
@@ -60,11 +61,11 @@ class MigrateCommand implements CommandInterface
             $table = $schema->createTable(self::MIGRATION_TABLE_NAME);
             $table->addColumn('id', Types::INTEGER, [
                 'autoincrement' => true,
-                'unsigned' => true
+                'unsigned' => true,
             ]);
             $table->addColumn('migrate', Types::STRING);
             $table->addColumn('created_at', Types::DATETIME_IMMUTABLE, [
-                'default' => 'CURRENT_TIMESTAMP'
+                'default' => 'CURRENT_TIMESTAMP',
             ]);
             $table->setPrimaryKey(['id']);
 
@@ -76,6 +77,7 @@ class MigrateCommand implements CommandInterface
     private function getAppliedMigrations(): array
     {
         $queryBuilder = $this->connection->createQueryBuilder();
+
         return $queryBuilder->select('migrate')
             ->from(self::MIGRATION_TABLE_NAME)
             ->executeQuery()
@@ -86,7 +88,7 @@ class MigrateCommand implements CommandInterface
     {
         $migrationsFiles = scandir($this->migratePath);
         $filtered = array_filter($migrationsFiles, function ($fileName) {
-           return ! in_array($fileName, ['.', '..']);
+            return ! in_array($fileName, ['.', '..']);
         });
 
         return array_values($filtered);

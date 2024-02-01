@@ -2,10 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Entities\Post;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Sergei\PhpFramework\Controller\AbstractController;
-use Sergei\PhpFramework\Http\Request;
 use Sergei\PhpFramework\Http\Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -27,6 +27,13 @@ class PostController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws NotFoundExceptionInterface
+     * @throws SyntaxError
+     * @throws ContainerExceptionInterface
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     public function create(): Response
     {
         return $this->render('create.html.twig');
@@ -34,6 +41,7 @@ class PostController extends AbstractController
 
     public function store()
     {
-        dd($this->request->getPost());
+        $post = Post::create($this->request->getPost()['title'], $this->request->getPost()['body']);
+        dd($post);
     }
 }

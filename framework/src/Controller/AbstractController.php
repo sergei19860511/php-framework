@@ -15,6 +15,7 @@ use Twig\Error\SyntaxError;
 abstract class AbstractController
 {
     protected ?ContainerInterface $container = null;
+
     protected Request $request;
 
     public function setContainer(ContainerInterface $container): void

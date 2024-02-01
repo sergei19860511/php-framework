@@ -2,7 +2,6 @@
 
 namespace Sergei\PhpFramework\Http;
 
-use Doctrine\DBAL\Connection;
 use League\Container\Container;
 use Sergei\PhpFramework\Http\Exceptions\HttpException;
 use Sergei\PhpFramework\Routing\RouterInterface;
