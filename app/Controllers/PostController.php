@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Entities\Post;
+use App\Services\DbService;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Sergei\PhpFramework\Controller\AbstractController;
@@ -13,6 +14,10 @@ use Twig\Error\SyntaxError;
 
 class PostController extends AbstractController
 {
+    public function __construct(private DbService $service)
+    {
+    }
+
     /**
      * @throws SyntaxError
      * @throws NotFoundExceptionInterface
@@ -42,6 +47,7 @@ class PostController extends AbstractController
     public function store()
     {
         $post = Post::create($this->request->getPost()['title'], $this->request->getPost()['body']);
+        $post = $this->service->save($post);
         dd($post);
     }
 }
