@@ -8,6 +8,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Sergei\PhpFramework\Controller\AbstractController;
 use Sergei\PhpFramework\Http\Exceptions\NotFoundException;
+use Sergei\PhpFramework\Http\RedirectResponse;
 use Sergei\PhpFramework\Http\Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -48,10 +49,11 @@ class PostController extends AbstractController
         return $this->render('create.html.twig');
     }
 
-    public function store()
+    public function store(): RedirectResponse
     {
-        $post = (new \App\Entities\Post)->create($this->request->getPost()['title'], $this->request->getPost()['body']);
+        $post = Post::create($this->request->getPost()['title'], $this->request->getPost()['body']);
         $post = $this->service->save($post);
-        dd($post);
+
+        return new RedirectResponse("/posts/{$post->getId()}");
     }
 }
