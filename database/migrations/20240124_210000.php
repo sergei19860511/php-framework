@@ -10,12 +10,12 @@ return new class
         $table = $schema->createTable('posts');
         $table->addColumn('id', Types::INTEGER, [
             'autoincrement' => true,
-            'unsigned' => true
+            'unsigned' => true,
         ]);
         $table->addColumn('title', Types::STRING);
         $table->addColumn('text', Types::TEXT);
         $table->addColumn('created_at', Types::DATETIME_IMMUTABLE, [
-            'default' => 'CURRENT_TIMESTAMP'
+            'default' => 'CURRENT_TIMESTAMP',
         ]);
         $table->setPrimaryKey(['id']);
     }

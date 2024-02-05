@@ -2,7 +2,6 @@
 
 namespace Sergei\PhpFramework\Http;
 
-use Doctrine\DBAL\Connection;
 use League\Container\Container;
 use Sergei\PhpFramework\Http\Exceptions\HttpException;
 use Sergei\PhpFramework\Routing\RouterInterface;
@@ -32,7 +31,7 @@ class Kernel
     private function createExceptionResponse(\Exception $e): Response
     {
         if (in_array($this->appEnv, ['local', 'dev'])) {
-            throw new $e;
+            throw $e;
         }
 
         if ($e instanceof HttpException) {
