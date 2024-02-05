@@ -14,7 +14,7 @@ class Post implements EntitiesInterface
 
     public static function create(string $title, string $text, ?int $id = null, ?\DateTimeImmutable $created_at = null): static
     {
-        return new static($id, $title, $text, $created_at ??  new \DateTimeImmutable('Europe/Moscow'));
+        return new static($id, $title, $text, $created_at ?? new \DateTimeImmutable('Europe/Moscow'));
     }
 
     public function getId(): ?int

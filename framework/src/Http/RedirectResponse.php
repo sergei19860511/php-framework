@@ -2,9 +2,6 @@
 
 namespace Sergei\PhpFramework\Http;
 
-use JetBrains\PhpStorm\NoReturn;
-use Sergei\PhpFramework\Http\Response;
-
 class RedirectResponse extends Response
 {
     public function __construct(string $url)

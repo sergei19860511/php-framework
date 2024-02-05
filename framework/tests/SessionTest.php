@@ -1,6 +1,7 @@
 <?php
 
 namespace Sergei\PhpFramework\Tests;
+
 use PHPUnit\Framework\TestCase;
 use Sergei\PhpFramework\Session\Session;
 

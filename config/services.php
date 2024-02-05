@@ -14,8 +14,9 @@ use Sergei\PhpFramework\Helpers\Helpers;
 use Sergei\PhpFramework\Http\Kernel;
 use Sergei\PhpFramework\Routing\Router;
 use Sergei\PhpFramework\Routing\RouterInterface;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
+use Sergei\PhpFramework\Session\Session;
+use Sergei\PhpFramework\Session\SessionInterface;
+use Sergei\PhpFramework\Template\TwigFactory;
 
 $appEnv = Helpers::loadEnv('APP_ENV');
 $dataBase = Helpers::loadEnv('DATA_BASE');
@@ -36,9 +37,14 @@ $container->extend(RouterInterface::class)->addMethodCall('registerRoute', [new 
 
 $container->add(Kernel::class)->addArgument(RouterInterface::class)->addArgument($container);
 
-$container->addShared('twig-loader', FilesystemLoader::class)->addArgument(new StringArgument(BASE_PATH.'/views'));
+$container->addShared(SessionInterface::class, Session::class);
 
-$container->addShared('twig', Environment::class)->addArgument('twig-loader');
+$container->add('twig-factory', TwigFactory::class)
+    ->addArguments([new StringArgument(BASE_PATH.'/views'), SessionInterface::class]);
+
+$container->addShared('twig', function () use ($container) {
+    return $container->get('twig-factory')->create();
+});
 
 $container->inflector(AbstractController::class)->invokeMethod('setContainer', [$container]);
 

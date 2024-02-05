@@ -2,14 +2,19 @@
 
 {% block main %}
     <div class="bg-body-tertiary p-5 rounded">
+        {% if (session().hasFlash('error')) %}
+            <div class="alert alert-danger" role="alert">
+                {{ session().getFlash('error')[0] }}
+            </div>
+        {% endif %}
         <form action="/posts" method="POST">
             <div class="mb-3">
                 <label for="title" class="form-label">Заголовок</label>
-                <input type="text" name="title" class="form-control" id="title" aria-describedby="titleHelp" required>
+                <input type="text" name="title" class="form-control" id="title" aria-describedby="titleHelp">
             </div>
             <div class="mb-3">
                 <label for="body" class="form-label">Контент</label>
-                <textarea name="body" id="" cols="30" rows="10" class="form-control" required></textarea>
+                <textarea name="body" id="" cols="30" rows="10" class="form-control"></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Добавить</button>
         </form>

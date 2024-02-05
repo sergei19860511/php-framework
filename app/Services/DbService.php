@@ -6,12 +6,12 @@ use App\Entities\EntitiesInterface;
 use App\Entities\Post;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Sergei\PhpFramework\Http\Exceptions\HttpException;
 use Sergei\PhpFramework\Http\Exceptions\NotFoundException;
 
 class DbService
 {
     private QueryBuilder $query;
+
     public function __construct(private Connection $connection)
     {
         $this->query = $this->connection->createQueryBuilder();
@@ -48,6 +48,7 @@ class DbService
         if (! $result) {
             return null;
         }
+
         return Post::create(
             title: $result['title'],
             text: $result['text'],

@@ -10,13 +10,14 @@ use Sergei\PhpFramework\Controller\AbstractController;
 use Sergei\PhpFramework\Http\Exceptions\NotFoundException;
 use Sergei\PhpFramework\Http\RedirectResponse;
 use Sergei\PhpFramework\Http\Response;
+use Sergei\PhpFramework\Session\SessionInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
 class PostController extends AbstractController
 {
-    public function __construct(private DbService $service)
+    public function __construct(private DbService $service, private SessionInterface $session)
     {
     }
 
@@ -51,6 +52,12 @@ class PostController extends AbstractController
 
     public function store(): RedirectResponse
     {
+        if (empty($this->request->getPost()['title']) || empty($this->request->getPost()['body'])) {
+            $this->session->setFlash('error', 'Необходимо заполнить обязательные поля');
+
+            return new RedirectResponse('/post/create');
+        }
+
         $post = Post::create($this->request->getPost()['title'], $this->request->getPost()['body']);
         $post = $this->service->save($post);
 
