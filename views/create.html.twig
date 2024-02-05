@@ -2,7 +2,7 @@
 
 {% block main %}
     <div class="bg-body-tertiary p-5 rounded">
-        {% if (session().hasFlash('error')) %}
+        {% if session().hasFlash('error') %}
             <div class="alert alert-danger" role="alert">
                 {{ session().getFlash('error')[0] }}
             </div>

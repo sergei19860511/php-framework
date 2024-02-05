@@ -60,6 +60,7 @@ class PostController extends AbstractController
 
         $post = Post::create($this->request->getPost()['title'], $this->request->getPost()['body']);
         $post = $this->service->save($post);
+        $this->session->setFlash('success', 'Успешно');
 
         return new RedirectResponse("/posts/{$post->getId()}");
     }

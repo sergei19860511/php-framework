@@ -1,6 +1,12 @@
 {% extends 'layouts/main.html.twig' %}
 
 {% block main %}
+    {% if session().hasFlash('success') %}
+        <div class="alert alert-success" role="alert">
+            {{ session().getFlash('success')[0] }}
+        </div>
+    {% endif %}
+
     <h1>{{ post.title }}</h1>
     <p>{{ post.text }}</p>
 {% endblock %}
