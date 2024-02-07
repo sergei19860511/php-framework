@@ -14,6 +14,7 @@ use Sergei\PhpFramework\Helpers\Helpers;
 use Sergei\PhpFramework\Http\Kernel;
 use Sergei\PhpFramework\Http\Middleware\RequestHandler;
 use Sergei\PhpFramework\Http\Middleware\RequestHandlerInterface;
+use Sergei\PhpFramework\Http\Middleware\RouteMiddleware;
 use Sergei\PhpFramework\Routing\Router;
 use Sergei\PhpFramework\Routing\RouterInterface;
 use Sergei\PhpFramework\Session\Session;
@@ -70,5 +71,7 @@ $container->add('console:migrate', MigrateCommand::class)
 $container->add(Application::class)->addArgument($container);
 
 $container->add(ConsoleKernel::class)->addArgument($container)->addArgument(Application::class);
+
+$container->add(RouteMiddleware::class)->addArguments([RouterInterface::class, $container]);
 
 return $container;
