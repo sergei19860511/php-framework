@@ -7,7 +7,7 @@ use Sergei\PhpFramework\Http\Response;
 
 class Authentication implements MiddlewareInterface
 {
-    private bool $authenticate = false;
+    private bool $authenticate = true;
 
     public function process(Request $request, RequestHandlerInterface $handler): Response
     {

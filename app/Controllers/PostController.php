@@ -17,7 +17,7 @@ use Twig\Error\SyntaxError;
 
 class PostController extends AbstractController
 {
-    public function __construct(private DbService $service, private SessionInterface $session)
+    public function __construct(private DbService $service)
     {
     }
 
@@ -53,14 +53,14 @@ class PostController extends AbstractController
     public function store(): RedirectResponse
     {
         if (empty($this->request->getPost()['title']) || empty($this->request->getPost()['body'])) {
-            $this->session->setFlash('error', 'Необходимо заполнить обязательные поля');
+            $this->request->getSession()->setFlash('error', 'Необходимо заполнить обязательные поля');
 
             return new RedirectResponse('/post/create');
         }
 
         $post = Post::create($this->request->getPost()['title'], $this->request->getPost()['body']);
         $post = $this->service->save($post);
-        $this->session->setFlash('success', 'Успешно');
+        $this->request->getSession()->setFlash('success', 'Успешно');
 
         return new RedirectResponse("/posts/{$post->getId()}");
     }

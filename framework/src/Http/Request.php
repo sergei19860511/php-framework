@@ -2,8 +2,12 @@
 
 namespace Sergei\PhpFramework\Http;
 
+use Sergei\PhpFramework\Session\SessionInterface;
+
 readonly class Request
 {
+    private SessionInterface $session;
+
     public function __construct(
         private array $get,
         private array $post,
@@ -36,5 +40,15 @@ readonly class Request
     public function getPost(): array
     {
         return $this->post;
+    }
+
+    public function getSession(): SessionInterface
+    {
+        return $this->session;
+    }
+
+    public function setSession(SessionInterface $session): void
+    {
+        $this->session = $session;
     }
 }

@@ -9,6 +9,7 @@ use Sergei\PhpFramework\Http\Response;
 class RequestHandler implements RequestHandlerInterface
 {
     private array $middleware = [
+        SessionMiddleware::class,
         Authentication::class,
         RouteMiddleware::class,
     ];
