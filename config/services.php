@@ -12,6 +12,8 @@ use Sergei\PhpFramework\Controller\AbstractController;
 use Sergei\PhpFramework\Dbal\ConnectionFactory;
 use Sergei\PhpFramework\Helpers\Helpers;
 use Sergei\PhpFramework\Http\Kernel;
+use Sergei\PhpFramework\Http\Middleware\RequestHandler;
+use Sergei\PhpFramework\Http\Middleware\RequestHandlerInterface;
 use Sergei\PhpFramework\Routing\Router;
 use Sergei\PhpFramework\Routing\RouterInterface;
 use Sergei\PhpFramework\Session\Session;
@@ -35,7 +37,14 @@ $container->add(RouterInterface::class, Router::class);
 
 $container->extend(RouterInterface::class)->addMethodCall('registerRoute', [new ArrayArgument($routes)]);
 
-$container->add(Kernel::class)->addArgument(RouterInterface::class)->addArgument($container);
+$container->add(RequestHandlerInterface::class, RequestHandler::class);
+
+$container->add(Kernel::class)
+    ->addArguments([
+        RouterInterface::class,
+        $container,
+        RequestHandlerInterface::class
+    ]);
 
 $container->addShared(SessionInterface::class, Session::class);
 
