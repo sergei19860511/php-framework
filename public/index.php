@@ -16,3 +16,5 @@ $kernel = $container->get(Kernel::class);
 
 $response = $kernel->handle($request);
 $response->send();
+
+$kernel->clear($request, $response);

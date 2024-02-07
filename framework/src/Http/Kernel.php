@@ -31,6 +31,11 @@ class Kernel
         return $response;
     }
 
+    public function clear(Request $request, Response $response): void
+    {
+        $request->getSession()->clearFlash();
+    }
+
     private function createExceptionResponse(\Exception $e): Response
     {
         if (in_array($this->appEnv, ['local', 'dev'])) {
