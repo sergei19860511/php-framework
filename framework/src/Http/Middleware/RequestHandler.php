@@ -2,6 +2,7 @@
 
 namespace Sergei\PhpFramework\Http\Middleware;
 
+use Psr\Container\ContainerInterface;
 use Sergei\PhpFramework\Http\Request;
 use Sergei\PhpFramework\Http\Response;
 
@@ -12,6 +13,10 @@ class RequestHandler implements RequestHandlerInterface
         Success::class,
     ];
 
+    public function __construct(private ContainerInterface $container)
+    {
+    }
+
     public function handle(Request $request): Response
     {
         if (empty($this->middleware)) {
@@ -21,6 +26,8 @@ class RequestHandler implements RequestHandlerInterface
         /** @var MiddlewareInterface $middlewareClass */
         $middlewareClass = array_shift($this->middleware);
 
-        return (new $middlewareClass())->process($request, $this);
+        $middleware = $this->container->get($middlewareClass);
+
+        return $middleware->process($request, $this);
     }
 }
