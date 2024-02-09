@@ -51,4 +51,9 @@ readonly class Request
     {
         $this->session = $session;
     }
+
+    public function input(string $key, string $default = null): mixed
+    {
+        return $this->post[$key] ?? $default;
+    }
 }

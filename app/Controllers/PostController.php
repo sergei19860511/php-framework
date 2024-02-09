@@ -51,7 +51,7 @@ class PostController extends AbstractController
 
     public function store(): RedirectResponse
     {
-        if (empty($this->request->getPost()['title']) || empty($this->request->getPost()['body'])) {
+        if (empty($this->request->input('title')) || empty($this->request->input('body'))) {
             $this->request->getSession()->setFlash('error', 'Необходимо заполнить обязательные поля');
 
             return new RedirectResponse('/post/create');

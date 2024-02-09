@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Forms\UserForm\RegisterForm;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Sergei\PhpFramework\Controller\AbstractController;
@@ -27,6 +28,15 @@ class RegisterController extends AbstractController
 
     public function store()
     {
-        dd($this->request);
+        $form = new RegisterForm();
+        $form->setFields(
+            $this->request->input('name'),
+            $this->request->input('email'),
+            $this->request->input('password'),
+            $this->request->input('password_confirmation')
+        );
+        if (! $form->validFields()) {
+            dd('Ошибка');
+        }
     }
 }
