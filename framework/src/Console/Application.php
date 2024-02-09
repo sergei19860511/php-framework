@@ -23,12 +23,14 @@ class Application
         $commandName = $argv[1] ?? null;
 
         if (! $commandName) {
-            throw new ConsoleException('Command not found');
+            throw new ConsoleException("Command {$commandName} not found");
         }
         /** @var CommandInterface $command */
         $command = $this->container->get("console:$commandName");
         $args = array_slice($argv, 2);
         $options = $this->parseArgs($args);
+
+        echo "Success {$commandName}".PHP_EOL;
 
         return $command->execute($options);
     }

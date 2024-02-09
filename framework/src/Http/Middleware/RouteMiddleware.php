@@ -12,14 +12,13 @@ class RouteMiddleware implements MiddlewareInterface
     public function __construct(
         private RouterInterface $router,
         private ContainerInterface $container
-    )
-    {
+    ) {
     }
 
     public function process(Request $request, RequestHandlerInterface $handler): Response
     {
         [$routeHandler, $vars] = $this->router->dispatch($request, $this->container);
 
-            return call_user_func_array($routeHandler, $vars);
+        return call_user_func_array($routeHandler, $vars);
     }
 }

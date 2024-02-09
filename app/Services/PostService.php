@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Entities\EntitiesInterface;
 use App\Entities\Post;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;

@@ -22,7 +22,6 @@ class MigrateCommand implements CommandInterface
     public function execute(array $params = []): int
     {
         try {
-            $this->connection->setAutoCommit(false);
             $this->addTableMigrations();
             $this->connection->beginTransaction();
             $appliedMigrations = $this->getAppliedMigrations();
@@ -41,9 +40,7 @@ class MigrateCommand implements CommandInterface
                 $this->connection->executeQuery($sql);
             }
 
-            $this->connection->commit();
         } catch (\Throwable $e) {
-            $this->connection->rollBack();
             throw $e;
         }
 
