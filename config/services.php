@@ -44,7 +44,7 @@ $container->add(Kernel::class)
     ->addArguments([
         RouterInterface::class,
         $container,
-        RequestHandlerInterface::class
+        RequestHandlerInterface::class,
     ]);
 
 $container->addShared(SessionInterface::class, Session::class);
