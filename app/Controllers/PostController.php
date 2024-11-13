@@ -3,21 +3,20 @@
 namespace App\Controllers;
 
 use App\Entities\Post;
-use App\Services\DbService;
+use App\Services\PostService;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Sergei\PhpFramework\Controller\AbstractController;
 use Sergei\PhpFramework\Http\Exceptions\NotFoundException;
 use Sergei\PhpFramework\Http\RedirectResponse;
 use Sergei\PhpFramework\Http\Response;
-use Sergei\PhpFramework\Session\SessionInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
 class PostController extends AbstractController
 {
-    public function __construct(private DbService $service)
+    public function __construct(private PostService $service)
     {
     }
 
@@ -52,7 +51,7 @@ class PostController extends AbstractController
 
     public function store(): RedirectResponse
     {
-        if (empty($this->request->getPost()['title']) || empty($this->request->getPost()['body'])) {
+        if (empty($this->request->input('title')) || empty($this->request->input('body'))) {
             $this->request->getSession()->setFlash('error', 'Необходимо заполнить обязательные поля');
 
             return new RedirectResponse('/post/create');

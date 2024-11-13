@@ -15,8 +15,7 @@ class Kernel
         private RouterInterface $router,
         private readonly Container $container,
         private RequestHandlerInterface $requestHandler
-    )
-    {
+    ) {
         $this->appEnv = $this->container->get('APP_ENV');
     }
 
