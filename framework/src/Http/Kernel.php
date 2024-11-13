@@ -4,28 +4,35 @@ namespace Sergei\PhpFramework\Http;
 
 use League\Container\Container;
 use Sergei\PhpFramework\Http\Exceptions\HttpException;
+use Sergei\PhpFramework\Http\Middleware\RequestHandlerInterface;
 use Sergei\PhpFramework\Routing\RouterInterface;
 
 class Kernel
 {
     private string $appEnv;
 
-    public function __construct(private RouterInterface $router, private readonly Container $container)
-    {
+    public function __construct(
+        private RouterInterface $router,
+        private readonly Container $container,
+        private RequestHandlerInterface $requestHandler
+    ) {
         $this->appEnv = $this->container->get('APP_ENV');
     }
 
     public function handle(Request $request): Response
     {
         try {
-            [$routeHandler, $vars] = $this->router->dispatch($request, $this->container);
-
-            $response = call_user_func_array($routeHandler, $vars);
+            $response = $this->requestHandler->handle($request);
         } catch (\Exception $e) {
             $response = $this->createExceptionResponse($e);
         }
 
         return $response;
+    }
+
+    public function clear(Request $request, Response $response): void
+    {
+        $request->getSession()->clearFlash();
     }
 
     private function createExceptionResponse(\Exception $e): Response

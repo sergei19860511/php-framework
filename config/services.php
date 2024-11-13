@@ -12,10 +12,14 @@ use Sergei\PhpFramework\Controller\AbstractController;
 use Sergei\PhpFramework\Dbal\ConnectionFactory;
 use Sergei\PhpFramework\Helpers\Helpers;
 use Sergei\PhpFramework\Http\Kernel;
+use Sergei\PhpFramework\Http\Middleware\RequestHandler;
+use Sergei\PhpFramework\Http\Middleware\RequestHandlerInterface;
+use Sergei\PhpFramework\Http\Middleware\RouteMiddleware;
 use Sergei\PhpFramework\Routing\Router;
 use Sergei\PhpFramework\Routing\RouterInterface;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
+use Sergei\PhpFramework\Session\Session;
+use Sergei\PhpFramework\Session\SessionInterface;
+use Sergei\PhpFramework\Template\TwigFactory;
 
 $appEnv = Helpers::loadEnv('APP_ENV');
 $dataBase = Helpers::loadEnv('DATA_BASE');
@@ -34,11 +38,23 @@ $container->add(RouterInterface::class, Router::class);
 
 $container->extend(RouterInterface::class)->addMethodCall('registerRoute', [new ArrayArgument($routes)]);
 
-$container->add(Kernel::class)->addArgument(RouterInterface::class)->addArgument($container);
+$container->add(RequestHandlerInterface::class, RequestHandler::class)->addArgument($container);
 
-$container->addShared('twig-loader', FilesystemLoader::class)->addArgument(new StringArgument(BASE_PATH.'/views'));
+$container->add(Kernel::class)
+    ->addArguments([
+        RouterInterface::class,
+        $container,
+        RequestHandlerInterface::class,
+    ]);
 
-$container->addShared('twig', Environment::class)->addArgument('twig-loader');
+$container->addShared(SessionInterface::class, Session::class);
+
+$container->add('twig-factory', TwigFactory::class)
+    ->addArguments([new StringArgument(BASE_PATH.'/views'), SessionInterface::class]);
+
+$container->addShared('twig', function () use ($container) {
+    return $container->get('twig-factory')->create();
+});
 
 $container->inflector(AbstractController::class)->invokeMethod('setContainer', [$container]);
 
@@ -55,5 +71,7 @@ $container->add('console:migrate', MigrateCommand::class)
 $container->add(Application::class)->addArgument($container);
 
 $container->add(ConsoleKernel::class)->addArgument($container)->addArgument(Application::class);
+
+$container->add(RouteMiddleware::class)->addArguments([RouterInterface::class, $container]);
 
 return $container;

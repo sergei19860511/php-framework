@@ -2,22 +2,21 @@
 
 namespace App\Services;
 
-use App\Entities\EntitiesInterface;
 use App\Entities\Post;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Sergei\PhpFramework\Http\Exceptions\HttpException;
 use Sergei\PhpFramework\Http\Exceptions\NotFoundException;
 
-class DbService
+class PostService
 {
     private QueryBuilder $query;
+
     public function __construct(private Connection $connection)
     {
         $this->query = $this->connection->createQueryBuilder();
     }
 
-    public function save(EntitiesInterface $entities): EntitiesInterface
+    public function save(Post $post): Post
     {
         $this->query->insert('posts')
             ->values([
@@ -26,17 +25,17 @@ class DbService
                 'created_at' => ':created_at',
             ])
             ->setParameters([
-                'title' => $entities->getTitle(),
-                'text' => $entities->getText(),
-                'created_at' => $entities->getCreatedAt()->format('Y-m-d H:i:s'),
+                'title' => $post->getTitle(),
+                'text' => $post->getText(),
+                'created_at' => $post->getCreatedAt()->format('Y-m-d H:i:s'),
             ])->executeQuery();
         $postId = $this->connection->lastInsertId();
-        $entities->setId($postId);
+        $post->setId($postId);
 
-        return $entities;
+        return $post;
     }
 
-    public function find(int $id): ?EntitiesInterface
+    public function find(int $id): ?Post
     {
         $result = $this->query->select('*')
             ->from('posts')
@@ -48,6 +47,7 @@ class DbService
         if (! $result) {
             return null;
         }
+
         return Post::create(
             title: $result['title'],
             text: $result['text'],
@@ -56,7 +56,7 @@ class DbService
         );
     }
 
-    public function findOrFail(int $id): EntitiesInterface
+    public function findOrFail(int $id): Post
     {
         $post = $this->find($id);
 
